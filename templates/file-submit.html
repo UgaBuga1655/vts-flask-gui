@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}vts{% endblock %}
+
+{% block content %}
+
+<body>
+   <h1>Home Page!</h1> 
+    <form action="#" method="post">
+        <p>Dane:</p>
+        <p><input type="file" name="file"></p>
+        <p><input type="submit" value="submit"></p>
+    </form>    
+    <p>
+    {% for x in response %}
+        {{ x }} <br>
+    {% endfor %}
+    </p>
+</body>
+</html>
+
+{% endblock %}
