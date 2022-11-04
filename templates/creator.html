@@ -5,6 +5,8 @@
 {% block content %}
 
 <h1>Kreator klasy</h1>
+<p><input type="file" id="file-form"></p>
+<p><button onclick="populateTable()">Wgraj plik</button></p>
 <div id="creator">
     <input type="text" name="group" id="group-form" placeholder="Rozszerzenie">
     <button onclick="addGroup()">Dodaj rozszerzenie</button>
@@ -16,6 +18,16 @@
     <button onclick="addStudent()">Dodaj ucznia</button>
     <table id="table"></table>
 </div>
+
+<style>
+    .active {
+        color: green;
+    }
+
+    .inactive {
+        color: red;
+    }
+</style>
 
 {% endblock %}
 
