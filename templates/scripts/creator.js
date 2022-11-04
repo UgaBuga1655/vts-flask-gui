@@ -9,6 +9,19 @@ function checkIfStudentInTable(name, surname){
     return false
 }
 
+function generateGroupLi(group_list, group) {
+    li = document.createElement("li")
+    li.setAttribute("onclick", "toggleGroupActive(this)")
+    li.setAttribute("class", "active")
+    li.setAttribute("id", group)
+    li.innerHTML = group
+    del_button = document.createElement("button")
+    del_button.innerHTML = "x"
+    del_button.setAttribute("onclick", "removeGroup(this.parentElement)")
+    li.appendChild(del_button)
+    group_list.appendChild(li)
+}
+
 function addGroup(){
     let group_list = document.getElementById("groups")
     let group = document.getElementById("group-form").value
@@ -20,10 +33,7 @@ function addGroup(){
         }
     }
     
-    li = document.createElement("li")
-    li.setAttribute("onclick", "removeGroup(this)")
-    li.innerHTML = group
-    group_list.appendChild(li)
+    generateGroupLi(group_list, group)
 
     // zaktualizuj aktywne pola wyboru
     for (const row of table.children){
@@ -37,9 +47,20 @@ function addGroup(){
     return true
 }
 
+function toggleGroupActive(li) {
+    li.className = li.className === 'active' ? 'inactive' : 'active'
+    for (const row of table.children){
+        for (const td of row.children){
+            if (td.id=="group-field" && td.innerHTML == li.id){
+                td.className = li.className
+            }
+        }
+    }
+}
+
 function removeGroup(group){
     // usuwa przedmiot z listy i z tabeli
-    let group_name = group.innerHTML
+    let group_name = group.id
     let table = document.getElementById("table")
     group.remove()
     for (const row of table.children){
@@ -71,9 +92,9 @@ function updateSelection(select){
 
     // dodaje opcję dla każdego możliwego przedmiotu, o ile uczeń już go nie rozszerza
     for (const list_element of groups.children){
-        if (!(current_groups.includes(list_element.innerHTML))){
+        if (!(current_groups.includes(list_element.id))){
             let option = document.createElement("option")
-            option.innerHTML = list_element.innerHTML
+            option.innerHTML = list_element.id
             select.appendChild(option) 
         }
 
@@ -107,6 +128,7 @@ function confirmGroup(row){
         let group = document.createElement("td")
         group.setAttribute("id", "group-field")
         group.setAttribute("onclick", "removeFromGroup(this)")
+        group.setAttribute ("class", document.getElementById(value).className)
         group.innerHTML = value
         row.appendChild(group)
     }
@@ -127,8 +149,10 @@ function addToGroup(element){
 function removeFromGroup(group_field){
     let select = group_field.parentElement.querySelector("#select")
     group_field.remove()
-    updateSelection(select)
-}
+    if (select){
+        updateSelection(select)
+    }
+    }
 
 function generateAddToGroupButton(row){
     let add_group_button = document.createElement("button")
@@ -170,4 +194,72 @@ function addStudent(){
     table.insertBefore(row, table.firstChild)
 
     return true
+}
+
+function populateTable(){
+    dane = textContent.split('\n')
+    dane.forEach((element, index) => {
+        dane[index] = element.split(' ')
+    });
+    // wczytanie rozszerzeń
+    let roz = dane.shift()
+    let group_list = document.getElementById("groups")
+    group_list.innerHTML = ""
+    roz.forEach(group => {
+        generateGroupLi(group_list, group)
+    })
+    // wczytanie wszystkich uczniów
+    let table = document.getElementById("table")
+    table.innerHTML = ""
+    dane.forEach(student => {
+        // console.log(student)
+        let row = document.createElement("tr")
+         
+        let del_button = document.createElement("button")
+        // remove entire row when pressed
+        del_button.setAttribute("onclick", "this.parentElement.remove()")
+        del_button.innerHTML = "X"
+        row.appendChild(del_button)
+
+        let name = document.createElement("td")
+        name.setAttribute("id", "name")
+        name.innerHTML = student.shift()
+        row.appendChild(name)
+
+        let surname = document.createElement("td")
+        surname.setAttribute("id", "surname")
+        surname.innerHTML = student.shift()
+        row.appendChild(surname)
+
+        while (student.length>0) {
+            let group = document.createElement("td")
+            let value = student.shift()
+            group.setAttribute("id", "group-field")
+            group.setAttribute("onclick", "removeFromGroup(this)")
+            group.setAttribute("class", document.getElementById(value).className)
+            group.innerHTML = value
+            row.appendChild(group)
+        }
+
+        generateAddToGroupButton(row)
+        table.appendChild(row)
+    })
+    // console.log(dane)
+}
+
+const inputFile = document.getElementById("file-form")
+inputFile.onchange = (e) => {
+    const file = inputFile.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (e) => {
+        // e.target points to the reader
+        textContent = e.target.result
+        console.log(`The content of ${file.name} is \n${textContent}`)
+    }
+    reader.onerror = (e) => {
+        const error = e.target.error
+        console.error(`Error occured while reading ${file.name}`, error)
+    }
+    reader.readAsText(file)
 }
