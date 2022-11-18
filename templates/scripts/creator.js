@@ -247,6 +247,31 @@ function populateTable(){
     // console.log(dane)
 }
 
+function generateFileFromTable(){
+    let dane = ""
+
+    let group_list = document.getElementById("groups")
+    let groups = []
+
+    for (const group of group_list.children) {
+        groups.push(group.id)
+    }
+    dane = dane.concat(groups.join(" "), "\n")
+
+    let table = document.getElementById("table")
+
+    for (row of table.children){
+        for (td of row.children) {
+            if (td.id == "name" || td.id == "surname" || td.id == "group-field"){
+                dane = dane.concat(td.innerHTML, " ")
+            }
+        }
+        dane = dane.concat("\n")
+    }
+
+    console.log(dane)
+}
+
 const inputFile = document.getElementById("file-form")
 inputFile.onchange = (e) => {
     const file = inputFile.files[0]
