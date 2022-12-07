@@ -3,10 +3,18 @@
 {% block title %}vts{% endblock %}
 
 {% block content %}
-<h1>Witaj!</h1>
-<h2>Masz gotowy plik, czy chcesz skorzystać z kreatora?</h2>
+<div class="card">
+    <h1 class="text-center">Witaj!</h1>
+    <div class="card-body text-center">
+        <h2>Masz gotowy plik, czy chcesz skorzystać z edytora?</h2>
 
-<a href="/file-submit"><button>Mam gotowy plik</button></a>
-<a href="/creator"><button>Chcę skorzystać z kreatora</button></a>
+    </div>
+    <div  class="card-body text-center">
+        <a href="/creator"><button class="btn btn-secondary">Chcę skorzystać z edytora</button></a>
+        <a href="/file-submit"><button class="btn btn-secondary">Mam gotowy plik</button></a>
+    </div>
+
+
+</div>
 
 {% endblock %}

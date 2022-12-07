@@ -10,21 +10,20 @@ function checkIfStudentInTable(name, surname){
 }
 
 function generateGroupLi(group_list, group) {
-    li = document.createElement("li")
-    li.setAttribute("onclick", "toggleGroupActive(this)")
-    li.setAttribute("class", "active")
+    li = document.createElement("button")
+    li.setAttribute("onclick", "removeGroup(this)")
     li.setAttribute("id", group)
     li.innerHTML = group
-    del_button = document.createElement("button")
-    del_button.innerHTML = "x"
-    del_button.setAttribute("onclick", "removeGroup(this.parentElement)")
-    li.appendChild(del_button)
     group_list.appendChild(li)
 }
 
 function addGroup(){
     let group_list = document.getElementById("groups")
     let group = document.getElementById("group-form").value
+
+    if (group.trim() == ""){
+        return false
+    }
 
     // jeśli taki przedmiot już istnieje, to nic nie rób
     for (const list_element of group_list.children){
@@ -45,17 +44,6 @@ function addGroup(){
     }
     
     return true
-}
-
-function toggleGroupActive(li) {
-    li.className = li.className === 'active' ? 'inactive' : 'active'
-    for (const row of table.children){
-        for (const td of row.children){
-            if (td.id=="group-field" && td.innerHTML == li.id){
-                td.className = li.className
-            }
-        }
-    }
 }
 
 function removeGroup(group){
@@ -125,10 +113,9 @@ function confirmGroup(row){
     select = row.querySelector("#select")
     let value = select.value
     if (value!=""){
-        let group = document.createElement("td")
+        let group = document.createElement("button")
         group.setAttribute("id", "group-field")
         group.setAttribute("onclick", "removeFromGroup(this)")
-        group.setAttribute ("class", document.getElementById(value).className)
         group.innerHTML = value
         row.appendChild(group)
     }
@@ -206,7 +193,7 @@ function populateTable(){
     let group_list = document.getElementById("groups")
     group_list.innerHTML = ""
     roz.forEach(group => {
-        generateGroupLi(group_list, group)
+        generateGroupLi(group_list, group.replaceAll("_", " "))
     })
     // wczytanie wszystkich uczniów
     let table = document.getElementById("table")
@@ -232,11 +219,10 @@ function populateTable(){
         row.appendChild(surname)
 
         while (student.length>0) {
-            let group = document.createElement("td")
-            let value = student.shift()
+            let group = document.createElement("button")
+            let value = student.shift().replaceAll("_", " ")
             group.setAttribute("id", "group-field")
             group.setAttribute("onclick", "removeFromGroup(this)")
-            group.setAttribute("class", document.getElementById(value).className)
             group.innerHTML = value
             row.appendChild(group)
         }
@@ -248,29 +234,38 @@ function populateTable(){
 }
 
 function generateFileFromTable(){
+    // generuje plik z danych z tabelki do zapisania przez użytkownika
     let dane = ""
 
     let group_list = document.getElementById("groups")
     let groups = []
 
     for (const group of group_list.children) {
-        groups.push(group.id)
+        groups.push(group.id.replaceAll(" ", "_"))
     }
-    dane = dane.concat(groups.join(" "), "\n")
+    dane = dane.concat(groups.join(" "))
 
     let table = document.getElementById("table")
 
     for (row of table.children){
+        dane = dane.concat("\n")
         for (td of row.children) {
             if (td.id == "name" || td.id == "surname" || td.id == "group-field"){
-                dane = dane.concat(td.innerHTML, " ")
+                dane = dane.concat(td.innerHTML.replaceAll(" ", "_"), " ")
             }
         }
-        dane = dane.concat("\n")
     }
+    dane = dane.replace(/ +$/gm, "")
 
-    console.log(dane)
+    if (dane == "") { return false }
+    document.getElementById("text-field").innerHTML=dane
+    var myFile = new File([dane], "dane.vts", {type: "text/plain;charset=utf-8"});
+    saveAs(myFile);
+
+    // console.log(dane)
 }
+
+
 
 const inputFile = document.getElementById("file-form")
 inputFile.onchange = (e) => {
@@ -280,7 +275,8 @@ inputFile.onchange = (e) => {
     reader.onload = (e) => {
         // e.target points to the reader
         textContent = e.target.result
-        console.log(`The content of ${file.name} is \n${textContent}`)
+        // console.log(`The content of ${file.name} is \n${textContent}`)
+        // populateTable()
     }
     reader.onerror = (e) => {
         const error = e.target.error

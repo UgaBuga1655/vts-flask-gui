@@ -5,18 +5,41 @@
 {% block content %}
 
 <body>
-   <h1>Home Page!</h1> 
-    <form action="#" method="post">
-        <p>Dane:</p>
-        <p><input type="file" name="file"></p>
-        <p><input type="submit" value="submit"></p>
-    </form>    
-    <p>
-    {% for x in response %}
-        {{ x }} <br>
-    {% endfor %}
-    </p>
-</body>
-</html>
+    <div class="card">
 
+        <h1 class="text-center">Wybierz swój plik</h1>
+
+        <div class="card-body">
+            <form class="input-group" action="#" method="post" enctype="application/x-www-form-urlencoded">
+                <input class="form-control" style="width: 247px;flex: none;" type="file" id="file-form">
+                <textarea readonly id="text-field" class="form-control" name="dane" style="display: none;"></textarea>
+                <input type="button" class="btn btn-secondary" type="submit" value="Prześlij">
+            </form>
+        </div>
+        
+        <div class="card">
+            <div id="answers" class="card-body">
+
+                    {% for x in response %}
+                        {{ x }} <br>
+                    {% endfor %}
+
+            </div>    
+        </div>
+        <div class="card-body">
+            <button class="btn btn-secondary" onclick="saveAnswers()">Zapisz Odpowiedź</button>
+        </div>
+    </div>
+</body>
+
+
+<!-- (A) LOAD FILE SAVER -->
+<!-- https://cdnjs.com/libraries/FileSaver.js -->
+<!-- https://github.com/eligrey/FileSaver.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+{% endblock %}
+
+{% block javascript %}
+    {% include "scripts/file-submit.js" %}
 {% endblock %}

@@ -40,7 +40,7 @@ def print_cliques(graph):
         for clique in cliques:
             clique = [Roz[i] for i in clique]
             clique.sort()
-            clique = " ".join(clique)
+            clique = "\t".join(clique)
             Cliques.append(clique)
     return Cliques
             
@@ -65,14 +65,14 @@ def main(file):
     # input_file = sys.argv[1]
     global Roz
     global graph
-    with open(file) as f:
-        Students = [line.split() for line in f.read().strip().split("\n")]
-        # tworzy listę rozszerzeń
-        Roz = Students.pop(0)
-        # for student in Students:
-        #    for roz in student[2:]:
-        #        if roz not in Roz:
-        #            Roz.append(roz)
+
+    Students = [line.split() for line in file.strip().split("\n")]
+    # tworzy listę rozszerzeń
+    Roz = Students.pop(0)
+    # for student in Students:
+    #    for roz in student[2:]:
+    #        if roz not in Roz:
+    #            Roz.append(roz)
 
     # tworzy graf-klikę, w którym każdy przedmiot-wierzchołek jest połączony ze wszystkimi innymi
     nodes = len(Roz)
