@@ -1,7 +1,5 @@
 from itertools import combinations
-from os import remove
 import networkx as nx
-import sys
 
 # algorytm ze strony:
 # https://iq.opengenus.org/algorithm-to-find-cliques-of-a-given-size-k/
