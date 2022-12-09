@@ -20,3 +20,6 @@ W edytorze użytkownik ma dostępne trzy pola do wpisywania danych.
 2. W kolejnym polu może wpisać nazwę przedmiotu (można korzystać ze spacji). Aby usunąć rozszerzenie, wystarczy kliknąć na kafelek z jego nazwą.
 3. W ostatnim może dodać ucznia wpisując jego imię i nazwisko (bez spacji). Aby usunąć ucznia wystarczy kliknąć na kafelek z "X" na lewo od jego imienia.
 Żeby dodać uczniowi przedmiot wystarzy kliknąć kafelek z "+" z prawej strony, wybrać przedmiot z dropdowna i potwierdzić klikając na kafelek "OK".
+Po skończeniu edytowania użytkownik może po prostu zapisać na dysku lub zapisać i od razu znaleźć grupy przedmiotów korzystając z guzików na dole.
+### Wgrywanie pliku
+W drugiej karcie użytkownik ma tylko jedno pole do wpisywania danych służące do wgrania pliku. Po potwierdzeniu guzikiem "Prześlij" w polu poniżej wyświetli się rozwiąznie - w każdej linii będzie osobna grupa rozszerzeń, które nie mają wspólnego ucznia. Odpowiedź można zapisać na dysku guzikiem "Zapisz Odpowiedź".
